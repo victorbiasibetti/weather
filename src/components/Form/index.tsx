@@ -33,7 +33,7 @@ const SearchForm: React.FC<Props> = ({ onSearch }: Props) => {
 
   return (
     <div className={style.wrapper}>
-      <span>{"Structure number and street name: "}</span>
+      <span>{"Address in one line: "}</span>
       <input onChange={handleInputChange} name="address" />
       <br />
       <button type="submit" onClick={handleClick}>
