@@ -5,11 +5,13 @@ import { WeatherModel } from "@/domain/models/weather";
 import { UnexpectedError } from "@/domain/errors";
 import { RemoteLoadWeather } from "./remote-load-weather";
 
-export const mockRemoteWeather = (): WeatherModel[] => [
+export const mockRemoteWeather = (
+  startTime: Date = new Date()
+): WeatherModel[] => [
   {
     name: "",
     detailedForecast: "",
-    startTime: new Date(),
+    startTime: startTime,
     temperature: 10,
     temperatureMin: 0,
     temperatureUnit: "F",
@@ -20,17 +22,18 @@ type SutTypes = {
   sut: RemoteLoadWeather;
   httpGetClientSpy: HttpGetClientSpy<WeatherModel[]>;
 };
-const makeSut = (url: string = "www.urlfake.com"): SutTypes => {
+const url = "www.correcturl.com?query";
+
+const makeSut = (): SutTypes => {
   const httpGetClientSpy = new HttpGetClientSpy<WeatherModel[]>();
-  const sut = new RemoteLoadWeather(url, httpGetClientSpy);
+  const sut = new RemoteLoadWeather(httpGetClientSpy);
   return { sut, httpGetClientSpy };
 };
 
 describe("RemoteLoadWeather", () => {
   test("Should call HttpGetClient with correct URL", async () => {
-    const url = "www.correcturl.com";
-    const { sut, httpGetClientSpy } = makeSut(url);
-    await sut.load();
+    const { sut, httpGetClientSpy } = makeSut();
+    await sut.load(url);
     expect(httpGetClientSpy.url).toBe(url);
   });
 
@@ -39,24 +42,25 @@ describe("RemoteLoadWeather", () => {
     httpGetClientSpy.response = {
       statusCode: HttpStatusCode.badRequest,
     };
-    const promise = sut.load();
+    const promise = sut.load(url);
     expect(promise).rejects.toThrow(new UnexpectedError());
   });
 
   test("Should return a list of Weather if HttpGetClient return 200", async () => {
     const { httpGetClientSpy, sut } = makeSut();
-    const httpResult = mockRemoteWeather();
+    const startTime = new Date();
+    const httpResult = mockRemoteWeather(startTime);
 
     httpGetClientSpy.response = {
       statusCode: HttpStatusCode.ok,
       body: httpResult,
     };
-    const weathers = await sut.load();
+    const weathers = await sut.load(url);
     expect(weathers).toEqual([
       {
         name: "",
         detailedForecast: "",
-        startTime: new Date(),
+        startTime,
         temperature: 10,
         temperatureMin: 0,
         temperatureUnit: "F",
