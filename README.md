@@ -1,6 +1,18 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Overview
 
+The project are show concepts of development of frontend inside simple design to get data of API of Weather.
+
+ - Api [Geocode](https://geocoding.geo.census.gov/geocoder/Geocoding_Services_API.pdf)
+ - Api [National Weather](https://www.weather.gov/documentation/services-web-api)
+ 
 ## Getting Started
+
+Install dependencies
+```bash
+npm i
+# or
+yarn
+```
 
 First, run the development server:
 
@@ -8,31 +20,25 @@ First, run the development server:
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Explain Architecture
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+The project use conceps of Clean Architecture with TDD
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+![image](https://user-images.githubusercontent.com/25385783/231917377-8955cdfc-410d-4f1a-995a-058728fb83d8.png)
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+ - The Domain Layer is for define 'DTO' for FE
+   - Models -> DTO of specific data
+   - Use Cases -> Interface define load data from BE
+   - Errors -> Main erros of application
+ - The Data Layer is responsible for business rules and implements interfaces defined from Domain
+   - RemoteLoadWeather implements Model of Domain and get data from Api
+ - The Infra Layers is to define interface for get data use Axios with Adapter Pattern
+ - Presentation Layer
+   - Union Infra layers and Data Layer with Injection Dependencies, looks like Main Layers in this case
+  
+  
+``` This case, in the concept (the god case or course) presentation layer need to be receive by factory all objects with another layers for fields (Validation Layers) ```
