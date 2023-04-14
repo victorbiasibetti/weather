@@ -23,7 +23,7 @@ yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-Or see on [production] (https://weather-alpha-six.vercel.app/)
+Or see on [production](https://weather-alpha-six.vercel.app/)
 
 ## Explain Architecture
 
